@@ -128,7 +128,7 @@ public class ControladorPedido implements ActionListener {
                 }
                 double precioUnitario = getProducto().getPrecio(); // precio unitario del producto seleccionado
                 double total = precioUnitario * cantidadComprar;
-                String estado = "Preparando el Pedido"; // estado inicial del pedido
+                String estado = "En preparación"; // estado inicial del pedido
 
                 // se crea el pedido con los datos obtenidos del producto seleccionado y el cliente que ha iniciado sesión
                 Pedido pedido = new Pedido(

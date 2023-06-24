@@ -47,6 +47,7 @@ public class ColaPedido {
         modelo.addColumn("Cantidad");
         modelo.addColumn("Precio Unitario");
         modelo.addColumn("Total");
+        modelo.addColumn("Estado");
         if (!colaVacia()) {
             while (aux != null) {
                 modelo.addRow(new Object[]{});
@@ -58,6 +59,7 @@ public class ColaPedido {
                 modelo.setValueAt(aux.getCantidad(), fila, 5);
                 modelo.setValueAt(aux.getPrecioUnitario(), fila, 6);
                 modelo.setValueAt(aux.getTotal(), fila, 7);
+                modelo.setValueAt(aux.getEstado(), fila, 8);
                 fila++;
                 aux = aux.getSiguiente();
             }
