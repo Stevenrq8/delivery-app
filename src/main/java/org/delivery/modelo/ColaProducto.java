@@ -133,13 +133,11 @@ public class ColaProducto {
                         anterior.setSiguiente(aux.getSiguiente());
                         totalProductos--;
                     }
-                    JOptionPane.showMessageDialog(null, "Producto eliminado: " + aux);
                     return;
                 }
                 anterior = aux;
                 aux = aux.getSiguiente();
             }
-            JOptionPane.showMessageDialog(null, "Producto no encontrado");
         }
     }
 

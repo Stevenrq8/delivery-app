@@ -137,7 +137,7 @@ public class ControladorCliente implements ActionListener {
                 return;
             }
             getVistaTablaProducto().setVisible(true);
-            JOptionPane.showMessageDialog(null, "Debe seleccionar el producto que desea comprar",
+            JOptionPane.showMessageDialog(null, "¡Debe seleccionar el producto que desea comprar!",
                     "Información", JOptionPane.INFORMATION_MESSAGE);
         }
     }

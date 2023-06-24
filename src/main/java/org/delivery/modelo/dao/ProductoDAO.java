@@ -89,6 +89,30 @@ public class ProductoDAO extends Conexion {
     }
 
     /**
+     * Método para actualizar la cantidad de un producto en la base de datos
+     *
+     * @param cantidad cantidad del producto a actualizar
+     * @param id       id del producto a actualizar
+     * @return true si se actualiza correctamente, false si no
+     */
+    public boolean actualizar(int cantidad, long id) {
+        PreparedStatement ps;
+        Connection con = getConexion();
+        // consulta para actualizar los datos del producto en la base de datos
+        String sql = "UPDATE producto SET cantidad=? WHERE id_producto=?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1, String.valueOf(cantidad));
+            ps.setString(2, String.valueOf(id));
+            ps.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error al actualizar producto: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Método para eliminar un producto de la base de datos
      *
      * @param id id del producto a eliminar

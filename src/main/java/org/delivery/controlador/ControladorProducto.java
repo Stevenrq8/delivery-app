@@ -97,6 +97,7 @@ public class ControladorProducto implements ActionListener {
                         } else {
                             JOptionPane.showMessageDialog(null, "Error al registrar el producto");
                         }
+                        getVistaRegistroProducto().getJtfIdProducto().setText("");
                         getVistaRegistroProducto().getJtfNombre().setText("");
                         getVistaRegistroProducto().getJtfPrecio().setText("");
                         getVistaRegistroProducto().getJtfCantidad().setText("");

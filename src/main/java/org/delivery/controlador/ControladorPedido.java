@@ -3,6 +3,7 @@ package org.delivery.controlador;
 import lombok.*;
 import org.delivery.modelo.*;
 import org.delivery.modelo.dao.PedidoDAO;
+import org.delivery.modelo.dao.ProductoDAO;
 import org.delivery.vista.*;
 
 import javax.swing.*;
@@ -79,8 +80,9 @@ public class ControladorPedido implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         PedidoDAO pedidoDAO = new PedidoDAO();
+        ProductoDAO productoDAO = new ProductoDAO();
 
-        if (e.getSource() == getVistaTablaProducto().getJbComprarProducto()) {
+        if (e.getSource() == getVistaTablaProducto().getJbComprarProducto() && getVistaTablaProducto().getJtProducto().getSelectedRow() != -1) {
             if (getControladorInicioSesion().getCliente() != null) { // si el cliente ha iniciado sesión
                 // se obtiene el cliente que ha iniciado sesión para crear el pedido del cliente actual y no del primero
                 // de la cola de clientes registrados
@@ -91,7 +93,7 @@ public class ControladorPedido implements ActionListener {
                 String fechaPedido = fecha.format(formato);
                 String direccion = getCliente().getDireccion();
                 int fila = getVistaTablaProducto().getJtProducto().getSelectedRow(); // fila seleccionada en la tabla de productos
-                setProducto(getProductoSeleccionado(fila)); // obtiene el producto seleccionado
+                setProducto(getProductoSeleccionado(fila)); // se obtiene el producto seleccionado en la tabla de productos
 
                 // se obtienen los datos del producto seleccionado en la tabla de productos para crear el pedido
                 long id = Long.parseLong(getVistaTablaProducto().getJtProducto().getValueAt(fila, 0).toString());
@@ -110,17 +112,23 @@ public class ControladorPedido implements ActionListener {
                     JOptionPane.showMessageDialog(null, "Debe ingresar una cantidad mayor a 0");
                     return;
                 } else if (cantidadComprar == cantidad) {
-                    getColaProducto().eliminar(getProducto()); // elimina el producto seleccionado de la cola
-                    DefaultTableModel modelo = (DefaultTableModel) getVistaTablaProducto().getJtProducto().getModel();
-                    modelo.removeRow(fila);
-                    getColaProducto().agregarProductoTabla(getVistaTablaProducto().getJtProducto());
+                    if (productoDAO.eliminar(getProducto().getId())) {
+                        getColaProducto().eliminar(getProducto());
+                        DefaultTableModel modelo = (DefaultTableModel) getVistaTablaProducto().getJtProducto().getModel();
+                        modelo.removeRow(fila);
+                        getColaProducto().agregarProductoTabla(getVistaTablaProducto().getJtProducto());
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error al eliminar el producto '"
+                                + getProducto().getNombre() + "'", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 } else {
-                    getProducto().setCantidad(cantidad - cantidadComprar); // actualiza la cantidad del producto seleccionado
+                    getProducto().setCantidad(cantidad - cantidadComprar); // se actualiza la cantidad del producto seleccionado
+                    productoDAO.actualizar(getProducto().getCantidad(), getProducto().getId());
                     getColaProducto().agregarProductoTabla(getVistaTablaProducto().getJtProducto());
                 }
                 double precioUnitario = getProducto().getPrecio(); // precio unitario del producto seleccionado
                 double total = precioUnitario * cantidadComprar;
-                String estado = "En espera"; // estado inicial del pedido
+                String estado = "Preparando el Pedido"; // estado inicial del pedido
 
                 // se crea el pedido con los datos obtenidos del producto seleccionado y el cliente que ha iniciado sesión
                 Pedido pedido = new Pedido(
@@ -137,7 +145,7 @@ public class ControladorPedido implements ActionListener {
                 if (pedidoDAO.registrar(pedido)) {
                     getColaPedido().agregar(pedido);
                     getColaPedido().agregarPedidoTabla(getVistaTablaPedido().getJtPedido());
-                    JOptionPane.showMessageDialog(null, "Pedido realizado con éxito", "Pedido",
+                    JOptionPane.showMessageDialog(null, "¡Pedido realizado con éxito!", "Pedido",
                             JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     JOptionPane.showMessageDialog(null, "No se pudo realizar el pedido", "Error",
@@ -147,6 +155,9 @@ public class ControladorPedido implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Debe iniciar sesión para poder comprar",
                         "Error", JOptionPane.ERROR_MESSAGE);
             }
+        } else {
+            JOptionPane.showMessageDialog(null, "¡Debe seleccionar el producto que desea comprar!",
+                    "Información", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 }
