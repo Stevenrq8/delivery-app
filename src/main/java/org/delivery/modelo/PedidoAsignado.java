@@ -1,14 +1,16 @@
 package org.delivery.modelo;
 
+
 import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class Pedido {
+public class PedidoAsignado {
 
     private long numeroPedido;
     private String fecha;
+    private Repartidor repartidor;
     private Cliente cliente;
     private String direccion;
     private Producto producto;
@@ -16,12 +18,13 @@ public class Pedido {
     private double precioUnitario;
     private double total;
     private String estado;
-    private Pedido siguiente; // Apuntador al siguiente nodo de la cola
+    private PedidoAsignado siguiente; // Apuntador al siguiente nodo de la cola
 
-    public Pedido(long numeroPedido, String fecha, Cliente cliente, String direccion, Producto producto, int cantidad,
-                  double precioUnitario, double total, String estado) {
+    public PedidoAsignado(long numeroPedido, String fecha, Repartidor repartidor, Cliente cliente, String direccion,
+                          Producto producto, int cantidad, double precioUnitario, double total, String estado) {
         this.numeroPedido = numeroPedido;
         this.fecha = fecha;
+        this.repartidor = repartidor;
         this.cliente = cliente;
         this.direccion = direccion;
         this.producto = producto;

@@ -28,12 +28,12 @@ public class VistaTablaRepartidor extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jspRepartidor = new JScrollPane();
-        jtRepartidor = new JTable();
+        jspRepartidor = new javax.swing.JScrollPane();
+        jtRepartidor = new javax.swing.JTable();
 
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jspRepartidor.setBorder(BorderFactory.createTitledBorder(null, "Repartidores Registrados", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Segoe UI", 0, 24), new java.awt.Color(0, 153, 153))); // NOI18N
+        jspRepartidor.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Repartidores Registrados", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Segoe UI", 0, 24), new java.awt.Color(0, 153, 153))); // NOI18N
 
         jtRepartidor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -45,20 +45,20 @@ public class VistaTablaRepartidor extends JFrame {
         ));
         jspRepartidor.setViewportView(jtRepartidor);
 
-        GroupLayout layout = new GroupLayout(getContentPane());
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jspRepartidor, GroupLayout.DEFAULT_SIZE, 988, Short.MAX_VALUE)
+                .addComponent(jspRepartidor, javax.swing.GroupLayout.DEFAULT_SIZE, 988, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jspRepartidor, GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
+                .addComponent(jspRepartidor, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -71,7 +71,7 @@ public class VistaTablaRepartidor extends JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private JScrollPane jspRepartidor;
-    private JTable jtRepartidor;
+    private javax.swing.JScrollPane jspRepartidor;
+    private javax.swing.JTable jtRepartidor;
     // End of variables declaration//GEN-END:variables
 }

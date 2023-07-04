@@ -1,13 +1,17 @@
 package org.delivery.controlador;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.delivery.modelo.*;
 import org.delivery.modelo.dao.AdministradorPedidoDAO;
+import org.delivery.modelo.dao.PedidoAsignadoDAO;
+import org.delivery.modelo.dao.PedidoDAO;
 import org.delivery.vista.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 @Getter
 @Setter
@@ -27,8 +31,10 @@ public class ControladorAdministradorPedido implements ActionListener {
     private VistaRegistroAdministradorPedido vistaRegistroAdministradorPedido;
     private VistaTablaAdministradorPedido vistaTablaAdministradorPedido;
     private VistaTablaPedido vistaTablaPedido;
+    private VistaTablaRepartidor vistaTablaRepartidor;
     private ControladorInicioSesion controladorInicioSesion;
     private AdministradorPedidoDAO administradorPedidoDAO;
+    private PedidoAsignadoDAO pedidoAsignadoDAO;
 
     public ControladorAdministradorPedido(Repartidor repartidor, ColaAdministrador colaAdministrador,
                                           ColaAdministradorPedido colaAdministradorPedido, ColaCliente colaCliente,
@@ -38,8 +44,9 @@ public class ControladorAdministradorPedido implements ActionListener {
                                           VistaPrincipalRepartidor vistaPrincipalRepartidor,
                                           VistaRegistroAdministradorPedido vistaRegistroAdministradorPedido,
                                           VistaTablaAdministradorPedido vistaTablaAdministradorPedido,
-                                          VistaTablaPedido vistaTablaPedido, ControladorInicioSesion controladorInicioSesion,
-                                          AdministradorPedidoDAO administradorPedidoDAO) {
+                                          VistaTablaPedido vistaTablaPedido, VistaTablaRepartidor vistaTablaRepartidor,
+                                          ControladorInicioSesion controladorInicioSesion,
+                                          AdministradorPedidoDAO administradorPedidoDAO, PedidoAsignadoDAO pedidoAsignadoDAO) {
         this.repartidor = repartidor;
         this.colaAdministrador = colaAdministrador;
         this.colaAdministradorPedido = colaAdministradorPedido;
@@ -54,14 +61,17 @@ public class ControladorAdministradorPedido implements ActionListener {
         this.vistaRegistroAdministradorPedido = vistaRegistroAdministradorPedido;
         this.vistaTablaAdministradorPedido = vistaTablaAdministradorPedido;
         this.vistaTablaPedido = vistaTablaPedido;
+        this.vistaTablaRepartidor = vistaTablaRepartidor;
         this.controladorInicioSesion = controladorInicioSesion;
         this.administradorPedidoDAO = administradorPedidoDAO;
+        this.pedidoAsignadoDAO = pedidoAsignadoDAO;
         this.vistaPrincipal.getJmiRegistrarAdministradorPedido().addActionListener(this);
         this.vistaRegistroAdministradorPedido.getJbCancelar().addActionListener(this);
         this.vistaRegistroAdministradorPedido.getJbAceptar().addActionListener(this);
         this.vistaPrincipalAdministradorPedido.getJbVerPedidos().addActionListener(this);
         this.vistaTablaPedido.getJbAsignarPedido().addActionListener(this);
         this.administradorPedidoDAO.listar(getColaAdministradorPedido(), getVistaTablaAdministradorPedido());
+        this.pedidoAsignadoDAO.listar(getColaPedidoAsignado(), getVistaPrincipalRepartidor());
     }
 
     /**
@@ -86,6 +96,8 @@ public class ControladorAdministradorPedido implements ActionListener {
         long cedula = 0;
         String nombre = "", apellido = "", direccion = "", telefono = "", correo = "", contrasena, contrasenaEncriptada = "";
         boolean v = false;
+        PedidoAsignadoDAO pedidoAsignadoDAO = new PedidoAsignadoDAO();
+        PedidoDAO pedidoDAO = new PedidoDAO();
 
         if (e.getSource() == getVistaPrincipal().getJmiRegistrarAdministradorPedido()) {
             getVistaRegistroAdministradorPedido().setVisible(true);
@@ -149,41 +161,65 @@ public class ControladorAdministradorPedido implements ActionListener {
         }
         if (e.getSource() == getVistaPrincipalAdministradorPedido().getJbVerPedidos()) {
             getVistaTablaPedido().setVisible(true);
+            // se hace visible el botón de asignar pedido que antes estaba oculto para el administrador
+            getVistaTablaPedido().getJbAsignarPedido().setVisible(true);
         }
         if (e.getSource() == getVistaTablaPedido().getJbAsignarPedido()) {
-            if (getControladorInicioSesion().getRepartidor() != null) { // si el repartidor inició sesión
-                setRepartidor(getControladorInicioSesion().getRepartidor());
-                if (!getColaPedido().colaVacia() && getVistaTablaPedido().getJtPedido().getRowCount() > 0) {
-                    int fila = 0;
-                    if (fila < getVistaTablaPedido().getJtPedido().getRowCount()) {
-                        // int numeroPedido = Integer.parseInt(getVistaTablaPedido().getJtPedido().getValueAt(fila, 0).toString());
-                        int numeroPedido = (int) (Math.random() * 1000);
-                        String fechaPedido = getVistaTablaPedido().getJtPedido().getValueAt(fila, 1).toString();
-                        Cliente clientePedido = (Cliente) getVistaTablaPedido().getJtPedido().getValueAt(fila, 2);
-                        String direccionPedido = getVistaTablaPedido().getJtPedido().getValueAt(fila, 3).toString();
-                        Producto productoPedido = (Producto) getVistaTablaPedido().getJtPedido().getValueAt(fila, 4);
-                        int cantidadPedido = Integer.parseInt(getVistaTablaPedido().getJtPedido().getValueAt(fila, 5).toString());
-                        double precioUnitarioPedido = Double.parseDouble(getVistaTablaPedido().getJtPedido().getValueAt(fila, 6).toString());
-                        double precioTotalPedido = Double.parseDouble(getVistaTablaPedido().getJtPedido().getValueAt(fila, 7).toString());
-                        String estadoPedido = "Asignado"; // el estado del pedido cambia a "Asignado" cuando se le asigna un repartidor
+            if (!getColaPedido().colaVacia() && getVistaTablaPedido().getJtPedido().getRowCount() > 0) {
+                int fila = 0;
+                // verifica si hay al menos una fila en la tabla de pedidos antes de acceder a los datos de la primera fila
+                if (fila < getVistaTablaPedido().getJtPedido().getRowCount()) {
+                    // long numeroPedido = (long) (Math.random() * 1000);
 
-                        Pedido pedidoAsignado = new Pedido(numeroPedido, fechaPedido, clientePedido, direccionPedido,
-                                productoPedido, cantidadPedido, precioUnitarioPedido, precioTotalPedido, estadoPedido);
+                    // se obtienen los datos del pedido
+                    long numeroPedido = Integer.parseInt(getVistaTablaPedido().getJtPedido().getValueAt(fila, 0).toString());
+                    String fechaPedido = getVistaTablaPedido().getJtPedido().getValueAt(fila, 1).toString();
+                    Cliente clientePedido = (Cliente) getVistaTablaPedido().getJtPedido().getValueAt(fila, 2);
+                    String direccionPedido = getVistaTablaPedido().getJtPedido().getValueAt(fila, 3).toString();
+                    Producto productoPedido = (Producto) getVistaTablaPedido().getJtPedido().getValueAt(fila, 4);
+                    int cantidadPedido = Integer.parseInt(getVistaTablaPedido().getJtPedido().getValueAt(fila, 5).toString());
+                    double precioUnitarioPedido = Double.parseDouble(getVistaTablaPedido().getJtPedido().getValueAt(fila, 6).toString());
+                    double precioTotalPedido = Double.parseDouble(getVistaTablaPedido().getJtPedido().getValueAt(fila, 7).toString());
+                    String estadoPedido = "En espera";
+
+                    /*
+                     * Cuando se crea el pedido asignado, el nombre del repartidor (getRepartidor()) estará vacío
+                     * hasta que posteriormente el repartidor acepte el pedido.
+                     * Cuando esto suceda, el nombre del repartidor se actualizará con el nombre del repartidor que aceptó el pedido.
+                     */
+                    PedidoAsignado pedidoAsignado = new PedidoAsignado(numeroPedido, fechaPedido, getRepartidor(),
+                            clientePedido, direccionPedido, productoPedido, cantidadPedido, precioUnitarioPedido,
+                            precioTotalPedido, estadoPedido);
+
+                    if (pedidoAsignadoDAO.registrar(pedidoAsignado)) {
                         getColaPedidoAsignado().agregar(pedidoAsignado);
-                        JOptionPane.showMessageDialog(null, "Pedido asignado al repartidor");
-                        getColaPedido().eliminar();
-                        getColaPedido().agregarPedidoTabla(getVistaTablaPedido().getJtPedido());
                         getColaPedidoAsignado().agregarPedidoAsignadoTabla(getVistaPrincipalRepartidor().getJtPedidoAsignado());
+                        if (pedidoDAO.eliminar(numeroPedido)) {
+                            getColaPedido().eliminar();
+                            if (!getColaPedido().colaVacia()) {
+                                getColaPedido().agregarPedidoTabla(getVistaTablaPedido().getJtPedido());
+                            } else {
+                                DefaultTableModel modelo = (DefaultTableModel) getVistaTablaPedido().getJtPedido().getModel();
+                                modelo.setRowCount(0);
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Ha ocurrido un error al eliminar el pedido");
+                        }
+                        JOptionPane.showMessageDialog(null, "Se ha asignado el pedido exitosamente");
                     } else {
-                        JOptionPane.showMessageDialog(null, "No hay pedidos por asignar");
+                        JOptionPane.showMessageDialog(null, "Ha ocurrido un error al asignar el pedido");
                     }
-                    if (getColaPedido().getTotalPedidos() == 0) {
-                        DefaultTableModel modelo = (DefaultTableModel) getVistaTablaPedido().getJtPedido().getModel();
-                        modelo.setRowCount(0);
-                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "No hay pedidos por asignar");
+                }
+                if (getColaPedido().getTotalPedidos() == 0 && getVistaTablaPedido().getJtPedido().getRowCount() == 0) {
+                    DefaultTableModel modelo = (DefaultTableModel) getVistaTablaPedido().getJtPedido().getModel();
+                    modelo.setRowCount(0);
+                } else {
+                    getColaPedido().agregarPedidoTabla(getVistaTablaPedido().getJtPedido());
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Debe iniciar sesión como repartidor");
+                JOptionPane.showMessageDialog(null, "No hay pedidos por asignar");
             }
         }
     }

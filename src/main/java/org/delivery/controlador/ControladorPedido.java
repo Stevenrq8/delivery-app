@@ -83,11 +83,9 @@ public class ControladorPedido implements ActionListener {
         ProductoDAO productoDAO = new ProductoDAO();
 
         if (e.getSource() == getVistaTablaProducto().getJbComprarProducto() && getVistaTablaProducto().getJtProducto().getSelectedRow() != -1) {
-            if (getControladorInicioSesion().getCliente() != null) { // si el cliente ha iniciado sesión
-                // se obtiene el cliente que ha iniciado sesión para crear el pedido del cliente actual y no del primero
-                // de la cola de clientes registrados
+            if (getControladorInicioSesion().getCliente() != null) {
                 setCliente(getControladorInicioSesion().getCliente());
-                long numeroPedido = (long) (Math.random() * 1000); // genera un número aleatorio para el número de pedido
+                long numeroPedido = (long) (Math.random() * 1000);
                 LocalDateTime fecha = LocalDateTime.now();
                 DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 String fechaPedido = fecha.format(formato);
@@ -95,7 +93,7 @@ public class ControladorPedido implements ActionListener {
                 int fila = getVistaTablaProducto().getJtProducto().getSelectedRow(); // fila seleccionada en la tabla de productos
                 setProducto(getProductoSeleccionado(fila)); // se obtiene el producto seleccionado en la tabla de productos
 
-                // se obtienen los datos del producto seleccionado en la tabla de productos para crear el pedido
+                // se obtienen los datos del producto seleccionado para crear el pedido
                 long id = Long.parseLong(getVistaTablaProducto().getJtProducto().getValueAt(fila, 0).toString());
                 String nombreProducto = getVistaTablaProducto().getJtProducto().getValueAt(fila, 2).toString();
                 String descripcion = getVistaTablaProducto().getJtProducto().getValueAt(fila, 3).toString();
@@ -128,9 +126,8 @@ public class ControladorPedido implements ActionListener {
                 }
                 double precioUnitario = getProducto().getPrecio(); // precio unitario del producto seleccionado
                 double total = precioUnitario * cantidadComprar;
-                String estado = "En preparación"; // estado inicial del pedido
+                String estado = "En preparación";
 
-                // se crea el pedido con los datos obtenidos del producto seleccionado y el cliente que ha iniciado sesión
                 Pedido pedido = new Pedido(
                         numeroPedido,
                         fechaPedido,
@@ -142,6 +139,7 @@ public class ControladorPedido implements ActionListener {
                         total,
                         estado
                 );
+
                 if (pedidoDAO.registrar(pedido)) {
                     getColaPedido().agregar(pedido);
                     getColaPedido().agregarPedidoTabla(getVistaTablaPedido().getJtPedido());

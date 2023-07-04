@@ -23,7 +23,7 @@ public class PedidoDAO extends Conexion {
             ps = con.prepareStatement(sql);
             ps.setString(1, String.valueOf(pedido.getNumeroPedido()));
             ps.setString(2, pedido.getFecha());
-            ps.setString(3, String.valueOf(pedido.getCliente().getNombre()));
+            ps.setString(3, pedido.getCliente().getNombre() + " " + pedido.getCliente().getApellido());
             ps.setString(4, pedido.getDireccion());
             ps.setString(5, String.valueOf(pedido.getProducto().getNombre()));
             ps.setString(6, String.valueOf(pedido.getCantidad()));
@@ -54,7 +54,7 @@ public class PedidoDAO extends Conexion {
             ps = con.prepareStatement(sql);
             ps.setString(1, String.valueOf(numeroPedido));
             rs = ps.executeQuery();
-            return rs.next(); // retorna true si encuentra un pedido con la el número de pedido ingresado
+            return rs.next(); // retorna true si encuentra un pedido con el número de pedido ingresado
         } catch (SQLException e) {
             System.out.println("Error al buscar pedido: " + e.getMessage());
             return false;
@@ -76,7 +76,7 @@ public class PedidoDAO extends Conexion {
         try {
             ps = con.prepareStatement(sql);
             ps.setString(1, pedido.getFecha());
-            ps.setString(2, String.valueOf(pedido.getCliente().getNombre()));
+            ps.setString(2, pedido.getCliente().getNombre() + " " + pedido.getCliente().getApellido());
             ps.setString(3, pedido.getDireccion());
             ps.setString(4, String.valueOf(pedido.getProducto().getNombre()));
             ps.setString(5, String.valueOf(pedido.getCantidad()));
@@ -138,10 +138,10 @@ public class PedidoDAO extends Conexion {
                 pedido.setFecha(rs.getString(2));
                 cliente.setNombre(rs.getString(3)); // se obtiene el nombre del cliente
                 pedido.setCliente(cliente); // se guarda el nombre del cliente en el pedido
-                cliente.setDireccion(rs.getString(4)); // se obtiene la dirección del cliente
-                pedido.setDireccion(cliente.getDireccion()); // se guarda la dirección del cliente en el pedido
-                producto.setNombre(rs.getString(5)); // se obtiene el nombre del producto
-                pedido.setProducto(producto); // se guarda el nombre del producto en el pedido
+                cliente.setDireccion(rs.getString(4));
+                pedido.setDireccion(cliente.getDireccion());
+                producto.setNombre(rs.getString(5));
+                pedido.setProducto(producto);
                 pedido.setCantidad(rs.getInt(6));
                 pedido.setPrecioUnitario(rs.getDouble(7));
                 pedido.setTotal(rs.getDouble(8));
@@ -150,7 +150,7 @@ public class PedidoDAO extends Conexion {
                 colaPedido.agregarPedidoTabla(vistaTablaPedido.getJtPedido());
             }
         } catch (SQLException e) {
-            System.out.println("Error al listar administradores: " + e.getMessage());
+            System.out.println("Error al listar pedidos: " + e.getMessage());
         }
     }
 }

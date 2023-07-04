@@ -155,7 +155,7 @@ public class ClienteDAO extends Conexion {
     }
 
     /**
-     * Método para que un administrador inicie sesión en el sistema comparando la contraseña ingresada
+     * Método para que un cliente inicie sesión en el sistema comparando la contraseña ingresada
      * con la de la base de datos
      *
      * @param cliente cliente que inicia sesión

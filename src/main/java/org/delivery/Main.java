@@ -16,6 +16,7 @@ public class Main {
         Restaurante restaurante = new Restaurante();
         Producto producto = new Producto();
         Pedido pedido = new Pedido();
+        PedidoAsignado pedidoAsignado = new PedidoAsignado();
         ColaAdministrador colaAdministrador = new ColaAdministrador();
         ColaAdministradorPedido colaAdministradorPedido = new ColaAdministradorPedido();
         ColaCliente colaCliente = new ColaCliente();
@@ -30,6 +31,7 @@ public class Main {
         AdministradorPedidoDAO administradorPedidoDAO = new AdministradorPedidoDAO();
         ClienteDAO clienteDAO = new ClienteDAO();
         PedidoDAO pedidoDAO = new PedidoDAO();
+        PedidoAsignadoDAO pedidoAsignadoDAO = new PedidoAsignadoDAO();
         ProductoDAO productoDAO = new ProductoDAO();
         RepartidorDAO repartidorDAO = new RepartidorDAO();
         RestauranteDAO restauranteDAO = new RestauranteDAO();
@@ -65,23 +67,24 @@ public class Main {
         );
         ControladorAdministrador controladorAdministrador = new ControladorAdministrador(
                 colaAdministrador, colaAdministradorPedido, colaCliente, colaRepartidor, colaRestaurante, vistaPrincipal,
-                vistaPrincipalAdministrador, vistaRegistroAdministrador, vistaTablaAdministrador, vistaTablaAdministradorPedido,
-                vistaTablaCliente, vistaTablaRepartidor, vistaTablaRestaurante, vistaTablaProducto, vistaTablaPedido,
-                administradorDAO
+                vistaPrincipalAdministrador, vistaPrincipalRepartidor, vistaRegistroAdministrador, vistaTablaAdministrador,
+                vistaTablaAdministradorPedido, vistaTablaCliente, vistaTablaRepartidor, vistaTablaRestaurante,
+                vistaTablaProducto, vistaTablaPedido, administradorDAO
         );
         ControladorAdministradorPedido controladorAdministradorPedido = new ControladorAdministradorPedido(
                 repartidor, colaAdministrador, colaAdministradorPedido, colaCliente, colaRepartidor, colaRestaurante,
                 colaPedido, colaPedidoAsignado, vistaPrincipal, vistaPrincipalAdministradorPedido, vistaPrincipalRepartidor,
-                vistaRegistroAdministradorPedido, vistaTablaAdministradorPedido, vistaTablaPedido, controladorInicioSesion,
-                administradorPedidoDAO
+                vistaRegistroAdministradorPedido, vistaTablaAdministradorPedido, vistaTablaPedido, vistaTablaRepartidor,
+                controladorInicioSesion, administradorPedidoDAO, pedidoAsignadoDAO
         );
         ControladorCliente controladorCliente = new ControladorCliente(
                 colaAdministrador, colaAdministradorPedido, colaCliente, colaRepartidor, colaRestaurante, vistaPrincipal,
                 vistaPrincipalCliente, vistaRegistroCliente, vistaTablaCliente, vistaTablaProducto, clienteDAO
         );
         ControladorRepartidor controladorRepartidor = new ControladorRepartidor(
-                colaAdministrador, colaAdministradorPedido, colaCliente, colaRepartidor, colaRestaurante, colaPedidoAsignado,
-                vistaPrincipal, vistaPrincipalRepartidor, vistaRegistroRepartidor, vistaTablaRepartidor, repartidorDAO
+                repartidor, colaAdministrador, colaAdministradorPedido, colaCliente, colaRepartidor, colaRestaurante,
+                colaPedidoAsignado, vistaPrincipal, vistaPrincipalRepartidor, vistaRegistroRepartidor, vistaTablaRepartidor,
+                repartidorDAO, controladorInicioSesion
         );
         ControladorRestaurante controladorRestaurante = new ControladorRestaurante(
                 colaAdministrador, colaAdministradorPedido, colaCliente, colaRepartidor, colaRestaurante, vistaPrincipal,

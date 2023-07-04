@@ -2,6 +2,7 @@ package org.delivery.modelo;
 
 import lombok.*;
 
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -10,15 +11,15 @@ import javax.swing.table.DefaultTableModel;
 @NoArgsConstructor
 public class ColaPedidoAsignado {
 
-    private Pedido primero;
-    private Pedido ultimo;
-    private int totalPedidos;
+    private PedidoAsignado primero;
+    private PedidoAsignado ultimo;
+    private int totalPedidosAsignados;
 
     public boolean colaVacia() {
-        return getTotalPedidos() == 0;
+        return getTotalPedidosAsignados() == 0;
     }
 
-    public void agregar(Pedido pedido) {
+    public void agregar(PedidoAsignado pedido) {
         if (colaVacia()) {
             setPrimero(pedido);
             setUltimo(pedido);
@@ -26,7 +27,7 @@ public class ColaPedidoAsignado {
             getUltimo().setSiguiente(pedido);
             setUltimo(pedido);
         }
-        totalPedidos++;
+        totalPedidosAsignados++;
     }
 
     /**
@@ -35,29 +36,33 @@ public class ColaPedidoAsignado {
      * @param tabla tabla a la que se agregan los pedidos asignados
      */
     public void agregarPedidoAsignadoTabla(JTable tabla) {
-        Pedido aux = getPrimero();
+        PedidoAsignado aux = getPrimero();
         DefaultTableModel modelo = new DefaultTableModel();
         int fila = 0;
 
         modelo.addColumn("Número de Pedido");
         modelo.addColumn("Fecha");
+        modelo.addColumn("Repartidor");
         modelo.addColumn("Cliente");
         modelo.addColumn("Dirección");
         modelo.addColumn("Producto");
         modelo.addColumn("Cantidad");
         modelo.addColumn("Precio Unitario");
         modelo.addColumn("Total");
+        modelo.addColumn("Estado");
         if (!colaVacia()) {
             while (aux != null) {
                 modelo.addRow(new Object[]{});
                 modelo.setValueAt(aux.getNumeroPedido(), fila, 0);
                 modelo.setValueAt(aux.getFecha(), fila, 1);
-                modelo.setValueAt(aux.getCliente(), fila, 2);
-                modelo.setValueAt(aux.getDireccion(), fila, 3);
-                modelo.setValueAt(aux.getProducto(), fila, 4);
-                modelo.setValueAt(aux.getCantidad(), fila, 5);
-                modelo.setValueAt(aux.getPrecioUnitario(), fila, 6);
-                modelo.setValueAt(aux.getTotal(), fila, 7);
+                modelo.setValueAt(aux.getRepartidor(), fila, 2);
+                modelo.setValueAt(aux.getCliente(), fila, 3);
+                modelo.setValueAt(aux.getDireccion(), fila, 4);
+                modelo.setValueAt(aux.getProducto(), fila, 5);
+                modelo.setValueAt(aux.getCantidad(), fila, 6);
+                modelo.setValueAt(aux.getPrecioUnitario(), fila, 7);
+                modelo.setValueAt(aux.getTotal(), fila, 8);
+                modelo.setValueAt(aux.getEstado(), fila, 9);
                 fila++;
                 aux = aux.getSiguiente();
             }
@@ -67,7 +72,7 @@ public class ColaPedidoAsignado {
 
     public boolean buscar(long numeroPedido) {
         if (!colaVacia()) {
-            Pedido aux = getPrimero();
+            PedidoAsignado aux = getPrimero();
             while (aux != null) {
                 if (aux.getNumeroPedido() == numeroPedido) {
                     return true;
@@ -81,14 +86,14 @@ public class ColaPedidoAsignado {
     public void eliminar() {
         if (!colaVacia()) {
             setPrimero(getPrimero().getSiguiente());
-            totalPedidos--;
+            totalPedidosAsignados--;
         }
     }
 
     public void limpiar() {
         setPrimero(null);
         setUltimo(null);
-        totalPedidos = 0;
+        totalPedidosAsignados = 0;
     }
 }
 

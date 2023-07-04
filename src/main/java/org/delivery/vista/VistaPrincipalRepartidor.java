@@ -28,20 +28,20 @@ public class VistaPrincipalRepartidor extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new JScrollPane();
-        jtPedidoAsignado = new JTable();
-        jbAceptarPedido = new JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtPedidoAsignado = new javax.swing.JTable();
+        jbAceptarPedido = new javax.swing.JButton();
 
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jScrollPane1.setBorder(BorderFactory.createTitledBorder(null, "Pedidos Asignados", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 24), new java.awt.Color(0, 153, 153))); // NOI18N
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Pedidos Asignados", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 24), new java.awt.Color(0, 153, 153))); // NOI18N
 
         jtPedidoAsignado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Número de Pedido", "Fecha", "Cliente", "Dirección", "Producto", "Cantidad", "Precio Unitario", "Total"
+                "Número de Pedido", "Fecha", "Repartidor", "Cliente", "Dirección", "Producto", "Cantidad", "Precio Unitario", "Total", "Estado"
             }
         ));
         jScrollPane1.setViewportView(jtPedidoAsignado);
@@ -50,25 +50,25 @@ public class VistaPrincipalRepartidor extends JFrame {
         jbAceptarPedido.setForeground(new java.awt.Color(255, 255, 255));
         jbAceptarPedido.setText("Aceptar Pedido");
 
-        GroupLayout layout = new GroupLayout(getContentPane());
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 988, Short.MAX_VALUE)
-                    .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1388, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jbAceptarPedido)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jbAceptarPedido)
                 .addContainerGap())
         );
@@ -86,8 +86,8 @@ public class VistaPrincipalRepartidor extends JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private JScrollPane jScrollPane1;
-    private JButton jbAceptarPedido;
-    private JTable jtPedidoAsignado;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton jbAceptarPedido;
+    private javax.swing.JTable jtPedidoAsignado;
     // End of variables declaration//GEN-END:variables
 }

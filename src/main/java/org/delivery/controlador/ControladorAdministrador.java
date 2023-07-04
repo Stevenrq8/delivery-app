@@ -20,6 +20,7 @@ public class ControladorAdministrador implements ActionListener {
     private ColaRestaurante colaRestaurante;
     private VistaPrincipal vistaPrincipal;
     private VistaPrincipalAdministrador vistaPrincipalAdministrador;
+    private VistaPrincipalRepartidor vistaPrincipalRepartidor;
     private VistaRegistroAdministrador vistaRegistroAdministrador;
     private VistaTablaAdministrador vistaTablaAdministrador;
     private VistaTablaAdministradorPedido vistaTablaAdministradorPedido;
@@ -34,11 +35,11 @@ public class ControladorAdministrador implements ActionListener {
     public ControladorAdministrador(ColaAdministrador colaAdministrador, ColaAdministradorPedido colaAdministradorPedido,
                                     ColaCliente colaCliente, ColaRepartidor colaRepartidor, ColaRestaurante colaRestaurante,
                                     VistaPrincipal vistaPrincipal, VistaPrincipalAdministrador vistaPrincipalAdministrador,
-                                    VistaRegistroAdministrador vistaRegistroAdministrador, VistaTablaAdministrador vistaTablaAdministrador,
-                                    VistaTablaAdministradorPedido vistaTablaAdministradorPedido, VistaTablaCliente vistaTablaCliente,
-                                    VistaTablaRepartidor vistaTablaRepartidor, VistaTablaRestaurante vistaTablaRestaurante,
-                                    VistaTablaProducto vistaTablaProducto, VistaTablaPedido vistaTablaPedido,
-                                    AdministradorDAO administradorDAO) {
+                                    VistaPrincipalRepartidor vistaPrincipalRepartidor, VistaRegistroAdministrador vistaRegistroAdministrador,
+                                    VistaTablaAdministrador vistaTablaAdministrador, VistaTablaAdministradorPedido vistaTablaAdministradorPedido,
+                                    VistaTablaCliente vistaTablaCliente, VistaTablaRepartidor vistaTablaRepartidor,
+                                    VistaTablaRestaurante vistaTablaRestaurante, VistaTablaProducto vistaTablaProducto,
+                                    VistaTablaPedido vistaTablaPedido, AdministradorDAO administradorDAO) {
         this.colaAdministrador = colaAdministrador;
         this.colaAdministradorPedido = colaAdministradorPedido;
         this.colaCliente = colaCliente;
@@ -46,6 +47,7 @@ public class ControladorAdministrador implements ActionListener {
         this.colaRestaurante = colaRestaurante;
         this.vistaPrincipal = vistaPrincipal;
         this.vistaPrincipalAdministrador = vistaPrincipalAdministrador;
+        this.vistaPrincipalRepartidor = vistaPrincipalRepartidor;
         this.vistaRegistroAdministrador = vistaRegistroAdministrador;
         this.vistaTablaAdministrador = vistaTablaAdministrador;
         this.vistaTablaAdministradorPedido = vistaTablaAdministradorPedido;
@@ -189,6 +191,14 @@ public class ControladorAdministrador implements ActionListener {
                     return;
                 }
                 getVistaTablaPedido().setVisible(true);
+                // se oculta el botón de asignar pedido para que solo el administrador de pedido pueda verlo
+                getVistaTablaPedido().getJbAsignarPedido().setVisible(false);
+            } else if (Objects.equals(getVistaPrincipalAdministrador().getJcbUsuariosRegistrados().getSelectedItem(), "Pedidos Asignados")) {
+                if (getVistaPrincipalRepartidor().getJtPedidoAsignado().getRowCount() == 0) {
+                    JOptionPane.showMessageDialog(null, "No hay pedidos asignados registrados");
+                    return;
+                }
+                getVistaPrincipalRepartidor().setVisible(true);
             } else if (Objects.equals(getVistaPrincipalAdministrador().getJcbUsuariosRegistrados().getSelectedItem(), "Seleccione una Opción")) {
                 JOptionPane.showMessageDialog(null, "Debe seleccionar una opción");
             }

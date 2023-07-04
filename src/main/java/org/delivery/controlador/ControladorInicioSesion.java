@@ -80,48 +80,52 @@ public class ControladorInicioSesion implements ActionListener {
              * Se busca el correo y contraseña del usuario en su respectiva cola. Si se encuentra,
              * se asigna el usuario encontrado a la variable correspondiente para poder acceder.
              */
-            if (getColaAdministrador().buscar(correo, contrasenaEncriptada)) { // Se busca el correo y contraseña en la cola de administradores
-                setAdministrador(getColaAdministrador().buscarAdministrador(correo, contrasenaEncriptada)); // Se asigna el administrador encontrado
-                getVistaInicioSesion().setVisible(false);
-                getVistaInicioSesion().getJtfCorreo().setText("");
-                getVistaInicioSesion().getJpfContrasena().setText("");
-                getVistaInicioSesion().getJtfCorreo().requestFocus();
-                getVistaPrincipalAdministrador().setVisible(true);
-            } else if (getColaAdministradorPedido().buscar(correo, contrasenaEncriptada)) {
-                setAdministradorPedido(getColaAdministradorPedido().buscarAdministradorPedido(correo, contrasenaEncriptada));
-                getVistaInicioSesion().setVisible(false);
-                getVistaInicioSesion().getJtfCorreo().setText("");
-                getVistaInicioSesion().getJpfContrasena().setText("");
-                getVistaInicioSesion().getJtfCorreo().requestFocus();
 
-                getVistaPrincipalAdministradorPedido().setVisible(true);
-            } else if (getColaCliente().buscar(correo, contrasenaEncriptada)) {
-                setCliente(getColaCliente().buscarCliente(correo, contrasenaEncriptada));
-                getVistaInicioSesion().setVisible(false);
-                getVistaInicioSesion().getJtfCorreo().setText("");
-                getVistaInicioSesion().getJpfContrasena().setText("");
-                getVistaInicioSesion().getJtfCorreo().requestFocus();
+                if (getColaAdministrador().buscar(correo, contrasenaEncriptada)) { // Se busca el correo y contraseña en la cola de administradores
+                    setAdministrador(getColaAdministrador().buscarAdministrador(correo, contrasenaEncriptada)); // Se asigna el administrador encontrado
+                    getVistaInicioSesion().setVisible(false);
+                    getVistaInicioSesion().getJtfCorreo().setText("");
+                    getVistaInicioSesion().getJpfContrasena().setText("");
+                    getVistaInicioSesion().getJtfCorreo().requestFocus();
+                    getVistaPrincipalAdministrador().setVisible(true);
+                } else if (getColaAdministradorPedido().buscar(correo, contrasenaEncriptada)) {
+                    setAdministradorPedido(getColaAdministradorPedido().buscarAdministradorPedido(correo, contrasenaEncriptada));
+                    getVistaInicioSesion().setVisible(false);
+                    getVistaInicioSesion().getJtfCorreo().setText("");
+                    getVistaInicioSesion().getJpfContrasena().setText("");
+                    getVistaInicioSesion().getJtfCorreo().requestFocus();
 
-                getVistaPrincipalCliente().setVisible(true);
-            } else if (getColaRestaurante().buscar(correo, contrasenaEncriptada)) {
-                setRestaurante(getColaRestaurante().buscarRestaurante(correo, contrasenaEncriptada));
-                getVistaInicioSesion().setVisible(false);
-                getVistaInicioSesion().getJtfCorreo().setText("");
-                getVistaInicioSesion().getJpfContrasena().setText("");
-                getVistaInicioSesion().getJtfCorreo().requestFocus();
-                getVistaPrincipalRestaurante().setVisible(true);
-            } else if (getColaRepartidor().buscar(correo, contrasenaEncriptada)) {
-                setRepartidor(getColaRepartidor().buscarRepartidor(correo, contrasenaEncriptada));
-                getVistaInicioSesion().setVisible(false);
-                getVistaInicioSesion().getJtfCorreo().setText("");
-                getVistaInicioSesion().getJpfContrasena().setText("");
-                getVistaInicioSesion().getJtfCorreo().requestFocus();
-                getVistaPrincipalRepartidor().setVisible(true);
-            } else {
-                JOptionPane.showMessageDialog(null, "Correo o Contraseña incorrectos",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                getVistaInicioSesion().getJtfCorreo().requestFocus();
-            }
+                    getVistaPrincipalAdministradorPedido().setVisible(true);
+                } else if (getColaCliente().buscar(correo, contrasenaEncriptada)) {
+                    setCliente(getColaCliente().buscarCliente(correo, contrasenaEncriptada));
+                    getVistaInicioSesion().setVisible(false);
+                    getVistaInicioSesion().getJtfCorreo().setText("");
+                    getVistaInicioSesion().getJpfContrasena().setText("");
+                    getVistaInicioSesion().getJtfCorreo().requestFocus();
+
+                    getVistaPrincipalCliente().setVisible(true);
+                } else if (getColaRestaurante().buscar(correo, contrasenaEncriptada)) {
+                    setRestaurante(getColaRestaurante().buscarRestaurante(correo, contrasenaEncriptada));
+                    getVistaInicioSesion().setVisible(false);
+                    getVistaInicioSesion().getJtfCorreo().setText("");
+                    getVistaInicioSesion().getJpfContrasena().setText("");
+                    getVistaInicioSesion().getJtfCorreo().requestFocus();
+                    getVistaPrincipalRestaurante().setVisible(true);
+                } else if (getColaRepartidor().buscar(correo, contrasenaEncriptada)) {
+                    setRepartidor(getColaRepartidor().buscarRepartidor(correo, contrasenaEncriptada));
+                    getVistaInicioSesion().setVisible(false);
+                    getVistaInicioSesion().getJtfCorreo().setText("");
+                    getVistaInicioSesion().getJpfContrasena().setText("");
+                    getVistaInicioSesion().getJtfCorreo().requestFocus();
+                    getVistaPrincipalRepartidor().setVisible(true);
+                } else if (correo.isEmpty() || contrasena.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Debe llenar todos los campos",
+                            "Campos vacíos", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Correo o Contraseña incorrectos",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    getVistaInicioSesion().getJtfCorreo().requestFocus();
+                }
         }
     }
 }

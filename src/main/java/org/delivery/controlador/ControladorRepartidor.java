@@ -2,6 +2,7 @@ package org.delivery.controlador;
 
 import lombok.*;
 import org.delivery.modelo.*;
+import org.delivery.modelo.dao.PedidoAsignadoDAO;
 import org.delivery.modelo.dao.RepartidorDAO;
 import org.delivery.vista.*;
 
@@ -14,6 +15,7 @@ import java.util.Objects;
 @Setter
 public class ControladorRepartidor implements ActionListener {
 
+    private Repartidor repartidor;
     private ColaAdministrador colaAdministrador;
     private ColaAdministradorPedido colaAdministradorPedido;
     private ColaCliente colaCliente;
@@ -25,12 +27,15 @@ public class ControladorRepartidor implements ActionListener {
     private VistaRegistroRepartidor vistaRegistroRepartidor;
     private VistaTablaRepartidor vistaTablaRepartidor;
     private RepartidorDAO repartidorDAO;
+    private ControladorInicioSesion controladorInicioSesion;
 
-    public ControladorRepartidor(ColaAdministrador colaAdministrador, ColaAdministradorPedido colaAdministradorPedido,
+    public ControladorRepartidor(Repartidor repartidor, ColaAdministrador colaAdministrador, ColaAdministradorPedido colaAdministradorPedido,
                                  ColaCliente colaCliente, ColaRepartidor colaRepartidor, ColaRestaurante colaRestaurante,
                                  ColaPedidoAsignado colaPedidoAsignado, VistaPrincipal vistaPrincipal,
                                  VistaPrincipalRepartidor vistaPrincipalRepartidor, VistaRegistroRepartidor vistaRegistroRepartidor,
-                                 VistaTablaRepartidor vistaTablaRepartidor, RepartidorDAO repartidorDAO) {
+                                 VistaTablaRepartidor vistaTablaRepartidor, RepartidorDAO repartidorDAO,
+                                 ControladorInicioSesion controladorInicioSesion) {
+        this.repartidor = repartidor;
         this.colaAdministrador = colaAdministrador;
         this.colaAdministradorPedido = colaAdministradorPedido;
         this.colaCliente = colaCliente;
@@ -42,6 +47,7 @@ public class ControladorRepartidor implements ActionListener {
         this.vistaRegistroRepartidor = vistaRegistroRepartidor;
         this.vistaTablaRepartidor = vistaTablaRepartidor;
         this.repartidorDAO = repartidorDAO;
+        this.controladorInicioSesion = controladorInicioSesion;
         this.vistaPrincipal.getJbRegistroRepartidor().addActionListener(this);
         this.vistaRegistroRepartidor.getJbCancelar().addActionListener(this);
         this.vistaRegistroRepartidor.getJbAceptar().addActionListener(this);
@@ -72,6 +78,7 @@ public class ControladorRepartidor implements ActionListener {
         String nombre = "", apellido = "", direccion = "", telefono = "", tipoVehiculo = "", correo = "", contrasena,
                 contrasenaEncriptada = "";
         boolean v = false;
+        PedidoAsignadoDAO pedidoAsignadoDAO = new PedidoAsignadoDAO();
 
         if (e.getSource() == getVistaPrincipal().getJbRegistroRepartidor()) {
             getVistaRegistroRepartidor().setVisible(true);
@@ -143,14 +150,19 @@ public class ControladorRepartidor implements ActionListener {
             }
         }
         if (e.getSource() == getVistaPrincipalRepartidor().getJbAceptarPedido()) {
-            Pedido primerPedido = getColaPedidoAsignado().getPrimero();
-            primerPedido.setEstado("En camino");
-            JOptionPane.showMessageDialog(null, "Pedido en camino" + "\n" + "Cliente: " +
-                    primerPedido.getCliente().toString());
-            getColaPedidoAsignado().eliminar();
-            if (getColaPedidoAsignado().getTotalPedidos() == 0) {
-                DefaultTableModel modelo = (DefaultTableModel) getVistaPrincipalRepartidor().getJtPedidoAsignado().getModel();
-                modelo.setRowCount(0);
+            if (getControladorInicioSesion().getRepartidor() != null) {
+                setRepartidor(getControladorInicioSesion().getRepartidor());
+                PedidoAsignado pedidoAsignado = getColaPedidoAsignado().getPrimero();
+
+                pedidoAsignado.setRepartidor(getRepartidor());
+                pedidoAsignado.setEstado("En camino");
+
+                if (pedidoAsignadoDAO.actualizar(pedidoAsignado)) {
+                    getColaPedidoAsignado().agregarPedidoAsignadoTabla(getVistaPrincipalRepartidor().getJtPedidoAsignado());
+                    JOptionPane.showMessageDialog(null, "Se ha aceptado el pedido exitosamente");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Ha ocurrido un error al aceptar el pedido");
+                }
             }
         }
     }

@@ -42,20 +42,20 @@ public class RepartidorDAO extends Conexion {
     /**
      * Método para buscar un repartidor en la base de datos
      *
-     * @param cedula cedula del repartidor a buscar
+     * @param cedula cédula del repartidor a buscar
      * @return true si encuentra un repartidor con la cédula ingresada, false si no
      */
     public boolean buscar(long cedula) {
         PreparedStatement ps;
         ResultSet rs;
         Connection con = getConexion();
-        // consulta para obtener los datos del repartidor donde la cedula sea igual a la ingresada
+        // consulta para obtener los datos del repartidor donde la cédula sea igual a la ingresada
         String sql = "SELECT * FROM repartidor WHERE cedula_repartidor = ?";
         try {
             ps = con.prepareStatement(sql);
             ps.setString(1, String.valueOf(cedula));
             rs = ps.executeQuery();
-            return rs.next(); // retorna true si encuentra un repartidor con la cedula ingresada
+            return rs.next(); // retorna true si encuentra un repartidor con la cédula ingresada
         } catch (SQLException e) {
             System.out.println("Error al buscar repartidor: " + e.getMessage());
             return false;
@@ -124,13 +124,13 @@ public class RepartidorDAO extends Conexion {
     /**
      * Método para eliminar un repartidor de la base de datos
      *
-     * @param cedula cedula del repartidor a eliminar
+     * @param cedula cédula del repartidor a eliminar
      * @return true si se elimina correctamente, false si no
      */
     public boolean eliminar(long cedula) {
         PreparedStatement ps;
         Connection con = getConexion();
-        // consulta para eliminar los datos del repartidor donde la cedula sea igual a la ingresada
+        // consulta para eliminar los datos del repartidor donde la cédula sea igual a la ingresada
         String sql = "DELETE FROM repartidor WHERE cedula_repartidor = ?";
         try {
             ps = con.prepareStatement(sql);
@@ -157,7 +157,7 @@ public class RepartidorDAO extends Conexion {
     }
 
     /**
-     * Método para que un administrador inicie sesión en el sistema comparando la contraseña ingresada
+     * Método para que un repartidor inicie sesión en el sistema comparando la contraseña ingresada
      * con la de la base de datos
      *
      * @param repartidor repartidor que inicia sesión
@@ -229,7 +229,7 @@ public class RepartidorDAO extends Conexion {
                 colaRepartidor.agregarRepartidorTabla(vistaTablaRepartidor.getJtRepartidor());
             }
         } catch (SQLException e) {
-            System.out.println("Error al listar administradores: " + e.getMessage());
+            System.out.println("Error al listar repartidores: " + e.getMessage());
         }
     }
 }
